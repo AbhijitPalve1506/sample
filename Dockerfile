@@ -1,14 +1,18 @@
-# Use the official PHP image with Apache
 FROM php:8.2-apache
 
-# Copy all project files to the Apache web root
+# Install MySQLi extension and MySQL client
+RUN apt-get update && \
+    apt-get install -y default-mysql-client && \
+    docker-php-ext-install mysqli && \
+    docker-php-ext-enable mysqli
+
+# Copy app files
 COPY . /var/www/html/
 
-# Give necessary permissions (optional)
-RUN chown -R www-data:www-data /var/www/html
+# Set permissions and make entrypoint script executable
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh && \
+    chown -R www-data:www-data /var/www/html
 
-# Expose port 80
-EXPOSE 80
-
-# for PHP extensions like mysqli
-RUN docker-php-ext-install mysqli
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["apache2-foreground"]

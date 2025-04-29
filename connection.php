@@ -1,13 +1,11 @@
 <?php
-$host = 'localhost';
-$dbname = 'attendance';
-$user = 'root'; // or your database username
-$pass = ''; // or your database password
+$host = 'db';  // match docker-compose service name
+$dbname = 'attendence';
+$user = 'root';
+$pass = 'Palve@56';
 
-// Create connection
 $conn = new mysqli($host, $user, $pass, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
